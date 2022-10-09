@@ -1,8 +1,9 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": "Launch and Debug Standalone Blazor WebAssembly App",
+            "name": "WebApp",
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}/Client"
@@ -12,6 +13,19 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:azureFunctions.pickProcess}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Api",
+            "program": "${workspaceRoot}/Api/Startup.cs",
+            "cwd": "${workspaceFolder}/Api"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Api/WebApp",
+            "configurations": ["Api", "WebApp"]
         }
     ]
 }

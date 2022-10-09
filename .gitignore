@@ -133,9 +133,6 @@ _TeamCity*
 # DotCover is a Code Coverage Tool
 *.dotCover
 
-# AxoCover is a Code Coverage Tool
-.axoCover/*
-!.axoCover/settings.json
 
 # Visual Studio code coverage results
 *.coverage
@@ -348,5 +345,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-Api/Properties/launchSettings.json
+
 Api/Properties/launchSettings.json

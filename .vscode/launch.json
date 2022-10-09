@@ -1,31 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
+        
 
         {
             "name": "WebApp",
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}/Client"
-        },
-        {
-            "name": "Attach to .NET Functions",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:azureFunctions.pickProcess}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Api",
-            "program": "${workspaceRoot}/Api/Startup.cs",
-            "cwd": "${workspaceFolder}/Api"
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Api/WebApp",
-            "configurations": ["Api", "WebApp"]
         }
     ]
 }

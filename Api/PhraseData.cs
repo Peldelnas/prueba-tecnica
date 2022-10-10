@@ -25,7 +25,7 @@ public class PhraseData : IPhraseData
                 Classification= "classif",
                 Entities = "entities",
                 Language = "Español",
-                IsTranslated = true,
+                TextTranslated = "",
                 KeyWords = "clave",
                 Sentiment = 4
 

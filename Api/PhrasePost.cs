@@ -11,6 +11,9 @@ using Data;
 using Azure.AI.TextAnalytics;
 using Azure.Core;
 using System;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Api;
 
@@ -36,21 +39,27 @@ public class PhrasesPost
         ILogger log)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var phrase = JsonSerializer.Deserialize<Phrase>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-        string document = @"Este documento está escrito en un idioma diferente al Inglés. Tiene como objetivo demostrar
-                    cómo invocar el método de Detección de idioma del servicio de Text Analytics en Microsoft Azure.
-                    También muestra cómo acceder a la información retornada por el servicio. Esta capacidad es útil
-                    para los sistemas de contenido que recopilan texto arbitrario, donde el idioma es desconocido.
-                    La característica Detección de idioma puede detectar una amplia gama de idiomas, variantes,
-                    dialectos y algunos idiomas regionales o culturales.";
+        var phrase = JsonSerializer.Deserialize<Phrase>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }); 
+        var lan = "es";       
 
         try
         {
-            Azure.Response<DetectedLanguage> response = client.DetectLanguage(document);
-
+            Azure.Response<DetectedLanguage> response = client.DetectLanguage(phrase.Text);
             DetectedLanguage language = response.Value;
-            Console.WriteLine($"Detected language {language.Name} with confidence score {language.ConfidenceScore}.");
+            phrase.Language = language.Name;
+            // habría que checkear een caso de errores
+            if(language.Name != "Spanish") {
+                lan = await TranslatorHandler.Detect(phrase.Text);
+                string texttt = await TranslatorHandler.Translate(phrase.Text, lan);               
+                var details = JArray.Parse(texttt);
+                phrase.TextTranslated = details[0]["translations"][0]["text"].ToString();
+            }
+            Azure.Response<CategorizedEntityCollection> entities = client.RecognizeEntities(phrase.Text, lan);
+
+            Console.WriteLine("lenguage: " + lan);
+            Console.WriteLine(entities.GetRawResponse());
+
+            
         }
         catch (Azure.RequestFailedException exception)
         {

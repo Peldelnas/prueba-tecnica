@@ -8,24 +8,24 @@ else if (Phrases != null && Phrases.Count() > 0)
     <ul class="list">
         @foreach (var phrase in Phrases)
         {
-            <li role="presentation">
+            <li role="presentation">                
+
                 <div class="card">
-                    <CardContent Name="@phrase.Text"
-                                 Description="@phrase.Language" />
-
-                    <footer class="card-footer">
-
+                    <div class="card-body">
+                        <header class="card-title">@phrase.Text</header>
+                            <p class="card-text">
+                                Idioma: @phrase.Language <br/>
+                                @phrase.TextTranslated <br/>
+                                Entidades del texto: <br/>
+                            </p>
                         <ButtonFooter Class="delete-item"
                                       IconClasses="fas fa-trash"
                                       OnClick="@(async _ => await DeletePhrase.InvokeAsync(phrase))"
                                       Label="Eliminar" />
-                        
-
-                    </footer>
-
+                    </div>
                 </div>
-
             </li>
+            
         }
     </ul>
 }

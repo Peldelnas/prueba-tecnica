@@ -2,14 +2,15 @@
 @inject HttpClient http
 @inject NavigationManager navigation
 
+
 <div class="content-container">
-    <ListHeader Title="My List"
+    <ListHeader Title="Frases"
                 HandleAdd="@AddNewPhrase"
                 HandleRefresh="@HandleRefresh"
                 RoutePath="/phrases" />
     <div class="columns is-multiline is-variable">
         <div class="column is-8">
-            <PhraseList ErrorMessage="@errorMessage"
+            <PhrasesList ErrorMessage="@errorMessage"
                          Phrases="@phrases"
                          SelectPhrase="@SelectPhrase"
                          DeletePhrase="@DeletePhrase" />

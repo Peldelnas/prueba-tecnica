@@ -25,35 +25,19 @@ else
                            readonly="readonly" />
                 }
                 <InputDetail Name="Texto"
-                             Placeholder="Oranges"
-                             @bind-Value="phrase.Text" />
-                <InputDetail Name="Lenguaje"
-                             Placeholder="box"
-                             @bind-Value="phrase.Language" />
-                <div class="field">
-                    <label class="label" for="quantity">
-                        quantity
-                    </label>
-                    <input name="Sentiment"
-                           class="input"
-                           type="number"
-                           min="1"
-                           max="100"
-                           value="@phrase.Sentiment"
-                           placeholder="1"
-                           @onchange="@(e => phrase.Sentiment = int.Parse(e.Value.ToString()))" />
-                </div>
+                             Placeholder="Escribe aquí tu frase"
+                             @bind-Value="phrase.Text" />                                
             </div>
         </div>
         <footer class="card-footer ">
             <ButtonFooter Class="cancel-button"
                           IconClasses="fas fa-undo"
                           OnClick="@CancelPhrase"
-                          Label="Cancel" />
+                          Label="Cancelar" />
             <ButtonFooter Class="save-button"
                           IconClasses="fas fa-save"
                           OnClick="@Save"
-                          Label="Save" />
+                          Label="Enviar" />
         </footer>
     </div>
 }

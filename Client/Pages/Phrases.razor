@@ -1,0 +1,73 @@
+﻿@page "/phrases"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<div class="content-container">
+    <ListHeader Title="Frases"
+                HandleAdd="@AddNewPhrase"
+                HandleRefresh="@HandleRefresh"
+                RoutePath="/phrases" />
+    <div class="columns is-multiline is-variable">
+        <div class="column is-8">
+            <PhrasesList ErrorMessage="@errorMessage"
+                         Phrases="@phrases"
+                         SelectPhrase="@SelectPhrase"
+                         DeletePhrase="@DeletePhrase" />
+        </div>
+    </div>
+
+    <ModalYesNo Message="@modalMessage"
+                OnNo="@CloseModal"
+                OnYes="@DeleteFromModal"
+                Show="@showModal"/>
+</div>
+
+@code {
+    private string errorMessage = "";
+    private IEnumerable<Phrase> phrases;
+    private Phrase phraseToDelete;
+    private bool showModal;
+    private string modalMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        phrases = await http.GetFromJsonAsync<IEnumerable<Phrase>>("api/phrases");
+    }
+
+    private void AddNewPhrase()
+    {
+        navigation.NavigateTo("/phrase/0");
+    }
+
+    private async Task HandleRefresh()
+    {
+        phrases = await http.GetFromJsonAsync<IEnumerable<Phrase>>("api/phrases");
+    }
+
+    private void SelectPhrase(Phrase phrase)
+    {
+        navigation.NavigateTo($"/phrase/{phrase.Id}");
+    }
+
+    private void DeletePhrase(Phrase phrase)
+    {
+        phraseToDelete = phrase;
+        showModal = true;
+        modalMessage = $"¿Deseas eliminar: {phraseToDelete.Text}?";
+    }
+
+    private void CloseModal()
+    {
+        phraseToDelete = null;
+        showModal = false;
+    }
+
+    private async Task DeleteFromModal()
+    {
+        await http.DeleteAsync($"api/phrases/{phraseToDelete.Id}");
+        await HandleRefresh();
+        phraseToDelete = null;
+        showModal = false;
+    }
+}

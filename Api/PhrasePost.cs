@@ -54,11 +54,12 @@ public class PhrasesPost
                 var details = JArray.Parse(texttt);
                 phrase.TextTranslated = details[0]["translations"][0]["text"].ToString();
             }
-            Azure.Response<CategorizedEntityCollection> entities = client.RecognizeEntities(phrase.Text, lan);
-
-            Console.WriteLine("lenguage: " + lan);
-            Console.WriteLine(entities.GetRawResponse());
-
+            var responseEntities = client.RecognizeEntities(phrase.Text, lan);
+            foreach(var entity in responseEntities.Value)
+            {
+                phrase.Entities += $"Palabra: {entity.Text},\r\nCategoría: {entity.Category},\r\nSub-Categoría: {entity.SubCategory}\r\n";
+            }
+            System.Threading.Thread.Sleep(1000);
             
         }
         catch (Azure.RequestFailedException exception)

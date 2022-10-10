@@ -8,6 +8,6 @@ public class Phrase
     public string TextTranslated { get; set; }
     public string Entities { get; set; }
     public string KeyWords{ get; set; }
-    public int Sentiment { get; set; }
+    public string Sentiment { get; set; }
     public string Classification { get; set; }
 }

@@ -16,8 +16,20 @@ else if (Phrases != null && Phrases.Count() > 0)
                             <p class="card-text">
                                 Idioma: @phrase.Language <br/>
                                 @phrase.TextTranslated <br/>
-                                Entidades del texto: <br/>
-                            </p>
+                                </p>  
+                                <header>Entidades del texto:</header>
+                                <p class="card-text">
+                                @phrase.Entities <br/>
+                                </p>   
+                                <header>Palabras clave:</header>
+                                <p class="card-text">
+                                @phrase.KeyWords <br/>
+                                </p>  
+
+
+
+
+
                         <ButtonFooter Class="delete-item"
                                       IconClasses="fas fa-trash"
                                       OnClick="@(async _ => await DeletePhrase.InvokeAsync(phrase))"

@@ -14,6 +14,7 @@ using System;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Api;
 
@@ -54,13 +55,63 @@ public class PhrasesPost
                 var details = JArray.Parse(texttt);
                 phrase.TextTranslated = details[0]["translations"][0]["text"].ToString();
             }
-            Azure.Response<CategorizedEntityCollection> entities = client.RecognizeEntities(phrase.Text, lan);
+            var responseEntities = client.RecognizeEntities(phrase.Text, lan);
+            foreach(var entity in responseEntities.Value)
+            {
+                phrase.Entities += $"Palabra: {entity.Text},\r\nCategoría: {entity.Category},\r\nSub-Categoría: {entity.SubCategory}\r\n";
+            }
 
-            Console.WriteLine("lenguage: " + lan);
-            Console.WriteLine(entities.GetRawResponse());
+            var responseKey = client.ExtractKeyPhrases(phrase.Text,lan);
+            foreach(var key in responseKey.Value)
+            {
+                phrase.KeyWords += key+ ", ";
+            }
+            phrase.KeyWords = phrase.KeyWords.Trim().Substring(0,phrase.KeyWords.Length - 2);
 
+
+            var reviewsResponse = client.AnalyzeSentiment(phrase.Text, lan, options: new AnalyzeSentimentOptions(){
+                IncludeOpinionMining = true
+            });
+            Azure.AI.TextAnalytics.DocumentSentiment review = reviewsResponse.Value;
+
+
+                phrase.Sentiment += $"Document sentiment: "+ review.Sentiment.ToString() +"\n";
+                phrase.Sentiment += $"\tPositive score: {review.ConfidenceScores.Positive.ToString()}";
+                phrase.Sentiment += $"\tNegative score: {review.ConfidenceScores.Negative.ToString()}";
+                phrase.Sentiment += $"\tNeutral score: {review.ConfidenceScores.Neutral.ToString()}\n";
+                Console.WriteLine("1");
+                foreach (SentenceSentiment sentence in review.Sentences)
+                {
+                    phrase.Sentiment += $"\tText: \"{sentence.Text}\"";
+                    phrase.Sentiment += $"\tSentence sentiment: {sentence.Sentiment}";
+                    phrase.Sentiment += $"\tSentence positive score: {sentence.ConfidenceScores.Positive:0.00}";
+                    phrase.Sentiment += $"\tSentence negative score: {sentence.ConfidenceScores.Negative:0.00}";
+                    phrase.Sentiment += $"\tSentence neutral score: {sentence.ConfidenceScores.Neutral:0.00}\n";
+                    Console.WriteLine("2");
+                    foreach (SentenceOpinion sentenceOpinion in sentence.Opinions)
+                    {
+                        phrase.Sentiment += $"\tTarget: {sentenceOpinion.Target.Text}, Value: {sentenceOpinion.Target.Sentiment}";
+                        phrase.Sentiment += $"\tTarget positive score: {sentenceOpinion.Target.ConfidenceScores.Positive:0.00}";
+                        phrase.Sentiment += $"\tTarget negative score: {sentenceOpinion.Target.ConfidenceScores.Negative:0.00}";
+                        Console.WriteLine("3");
+                        foreach (AssessmentSentiment assessment in sentenceOpinion.Assessments)
+                        {
+                            phrase.Sentiment += $"\t\tRelated Assessment: {assessment.Text}, Value: {assessment.Sentiment}";
+                            phrase.Sentiment += $"\t\tRelated Assessment positive score: {assessment.ConfidenceScores.Positive:0.00}";
+                            phrase.Sentiment += $"\t\tRelated Assessment negative score: {assessment.ConfidenceScores.Negative:0.00}";
+                            Console.WriteLine("4");
+                        }
+                    }
+                }                
+                phrase.Sentiment += $"\n";
+            
+
+
+
+            System.Threading.Thread.Sleep(1000);
             
         }
+
         catch (Azure.RequestFailedException exception)
         {
             Console.WriteLine($"Error Code: {exception.ErrorCode}");

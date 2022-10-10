@@ -1,8 +1,8 @@
-﻿@page "/product/{productId:int}"
+﻿@page "/phrase/{phraseId:int}"
 @inject HttpClient http
 @inject NavigationManager navigation
 
-@if (product == null)
+@if (phrase == null)
 {
     <p>Loading...</p>
 }
@@ -11,44 +11,44 @@ else
     <div class="card edit-detail">
         <header class="card-header">
             <p class="card-header-title">
-                @product.Name
+                @phrase.Text
             </p>
         </header>
         <div class="card-content">
             <div class="content">
-                @if (product.Id != 0)
+                @if (phrase.Id != 0)
                 {
                     <label class="label" for="id">id</label>
                     <input name="id"
                            class="input"
-                           value="@product.Id"
+                           value="@phrase.Id"
                            readonly="readonly" />
                 }
-                <InputDetail Name="name"
+                <InputDetail Name="Texto"
                              Placeholder="Oranges"
-                             @bind-Value="product.Name" />
-                <InputDetail Name="description"
+                             @bind-Value="phrase.Text" />
+                <InputDetail Name="Lenguaje"
                              Placeholder="box"
-                             @bind-Value="product.Description" />
+                             @bind-Value="phrase.Language" />
                 <div class="field">
                     <label class="label" for="quantity">
                         quantity
                     </label>
-                    <input name="quantity"
+                    <input name="Sentiment"
                            class="input"
                            type="number"
                            min="1"
                            max="100"
-                           value="@product.Quantity"
+                           value="@phrase.Sentiment"
                            placeholder="1"
-                           @onchange="@(e => product.Quantity = int.Parse(e.Value.ToString()))" />
+                           @onchange="@(e => phrase.Sentiment = int.Parse(e.Value.ToString()))" />
                 </div>
             </div>
         </div>
         <footer class="card-footer ">
             <ButtonFooter Class="cancel-button"
                           IconClasses="fas fa-undo"
-                          OnClick="@CancelProduct"
+                          OnClick="@CancelPhrase"
                           Label="Cancel" />
             <ButtonFooter Class="save-button"
                           IconClasses="fas fa-save"
@@ -59,37 +59,37 @@ else
 }
 
 @code {
-    private Product product;
+    private Phrase phrase;
 
-    [Parameter] public int ProductId { get; set; }
+    [Parameter] public int PhraseId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (ProductId == 0)
+        if (PhraseId == 0)
         {
-            product = new Product();
+            phrase = new Phrase();
         }
         else
         {
-            var products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
-            product = products.First(p => p.Id == ProductId);
+            var phrases = await http.GetFromJsonAsync<IEnumerable<Phrase>>("api/phrases");
+            phrase = phrases.First(p => p.Id == PhraseId);
         }
     }
 
-    private void CancelProduct()
+    private void CancelPhrase()
     {
         navigation.NavigateTo("/");
     }
 
     private async Task Save()
     {
-        if (product.Id == 0)
+        if (phrase.Id == 0)
         {
-            await http.PostAsJsonAsync("api/products", product);
+            await http.PostAsJsonAsync("api/phrases", phrase);
         }
         else
         {
-            await http.PutAsJsonAsync("api/products", product);
+            await http.PutAsJsonAsync("api/phrases", phrase);
         }
         navigation.NavigateTo("/");
     }

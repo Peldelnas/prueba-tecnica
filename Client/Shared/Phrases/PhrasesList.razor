@@ -2,26 +2,27 @@
 {
     <div>@ErrorMessage</div>
 }
-else if (Products != null && Products.Count() > 0)
+else if (Phrases != null && Phrases.Count() > 0)
 {
+    
     <ul class="list">
-        @foreach (var product in Products)
+        @foreach (var phrase in Phrases)
         {
             <li role="presentation">
                 <div class="card">
-                    <CardContent Name="@product.Name"
-                                 Description="@product.Description" />
+                    <CardContent Name="@phrase.Text"
+                                 Description="@phrase.Language" />
 
                     <footer class="card-footer">
 
                         <ButtonFooter Class="delete-item"
                                       IconClasses="fas fa-trash"
-                                      OnClick="@(async _ => await DeleteProduct.InvokeAsync(product))"
+                                      OnClick="@(async _ => await DeletePhrase.InvokeAsync(phrase))"
                                       Label="Delete" />
 
                         <ButtonFooter Class="edit-item"
                                       IconClasses="fas fa-edit"
-                                      OnClick="@(async _ => await SelectProduct.InvokeAsync(product))"
+                                      OnClick="@(async _ => await SelectPhrase.InvokeAsync(phrase))"
                                       Label="Edit" />
 
                     </footer>
@@ -37,8 +38,8 @@ else
     <div>Loading data...</div>
 }
 @code {
-    [Parameter] public IEnumerable<Product> Products { get; set; }
-    [Parameter] public EventCallback<Product> DeleteProduct { get; set; }
-    [Parameter] public EventCallback<Product> SelectProduct { get; set; }
+    [Parameter] public IEnumerable<Phrase> Phrases { get; set; }
+    [Parameter] public EventCallback<Phrase> DeletePhrase { get; set; }
+    [Parameter] public EventCallback<Phrase> SelectPhrase { get; set; }
     [Parameter] public string ErrorMessage { get; set; }
 }

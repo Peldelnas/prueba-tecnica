@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Api;
 
-public class ProductsDelete
+public class PhrasesDelete
 {
-    private readonly IProductData productData;
+    private readonly IPhraseData phraseData;
 
-    public ProductsDelete(IProductData productData)
+    public PhrasesDelete(IPhraseData phraseData)
     {
-        this.productData = productData;
+        this.phraseData = phraseData;
     }
 
-    [FunctionName("ProductsDelete")]
+    [FunctionName("PhrasesDelete")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "products/{productId:int}")] HttpRequest req,
-        int productId,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "phrases/{phraseId:int}")] HttpRequest req,
+        int phraseId,
         ILogger log)
     {
-        var result = await productData.DeleteProduct(productId);
+        var result = await phraseData.DeletePhrase(phraseId);
 
         if (result)
         {

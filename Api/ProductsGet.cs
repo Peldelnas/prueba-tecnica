@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Api;
 
-public class ProductsGet
+public class PhrasesGet
 {
-    private readonly IProductData productData;
+    private readonly IPhraseData phraseData;
 
-    public ProductsGet(IProductData productData)
+    public PhrasesGet(IPhraseData phraseData)
     {
-        this.productData = productData;
+        this.phraseData = phraseData;
     }
 
-    [FunctionName("ProductsGet")]
+    [FunctionName("PhrasesGet")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "products")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "phrases")] HttpRequest req)
     {
-        var products = await productData.GetProducts();
-        return new OkObjectResult(products);
+        var phrases = await phraseData.GetPhrases();
+        return new OkObjectResult(phrases);
     }
 }

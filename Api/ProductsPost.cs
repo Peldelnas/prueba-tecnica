@@ -10,24 +10,24 @@ using Data;
 
 namespace Api;
 
-public class ProductsPost
+public class PhrasesPost
 {
-    private readonly IProductData productData;
+    private readonly IPhraseData phraseData;
 
-    public ProductsPost(IProductData productData)
+    public PhrasesPost(IPhraseData phraseData)
     {
-        this.productData = productData;
+        this.phraseData = phraseData;
     }
 
-    [FunctionName("ProductsPost")]
+    [FunctionName("PhrasesPost")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "phrases")] HttpRequest req,
         ILogger log)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var product = JsonSerializer.Deserialize<Product>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var phrase = JsonSerializer.Deserialize<Phrase>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-        var newProduct = await productData.AddProduct(product);
-        return new OkObjectResult(newProduct);
+        var newPhrase = await phraseData.AddPhrase(phrase);
+        return new OkObjectResult(newPhrase);
     }
 }

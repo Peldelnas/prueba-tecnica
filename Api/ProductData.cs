@@ -6,38 +6,29 @@ using Data;
 
 namespace Api;
 
-public interface IProductData
+public interface IPhraseData
 {
-    Task<Product> AddProduct(Product product);
-    Task<bool> DeleteProduct(int id);
-    Task<IEnumerable<Product>> GetProducts();
-    Task<Product> UpdateProduct(Product product);
+    Task<Phrase> AddPhrase(Phrase phrase);
+    Task<bool> DeletePhrase(int id);
+    Task<IEnumerable<Phrase>> GetPhrases();
+    Task<Phrase> UpdatePhrase(Phrase phrase);
 }
 
-public class ProductData : IProductData
+public class PhraseData : IPhraseData
 {
-    private readonly List<Product> products = new List<Product>
+    private readonly List<Phrase> phrases = new List<Phrase>
         {
-            new Product
+            new Phrase
             {
                 Id = 10,
-                Name = "Strawberries",
-                Description = "16oz package of fresh organic strawberries",
-                Quantity = 1
-            },
-            new Product
-            {
-                Id = 20,
-                Name = "Sliced bread",
-                Description = "Loaf of fresh sliced wheat bread",
-                Quantity = 1
-            },
-            new Product
-            {
-                Id = 30,
-                Name = "Apples",
-                Description = "Bag of 7 fresh McIntosh apples",
-                Quantity = 1
+                Text = "Esto es una prueba",
+                Classification= "classif",
+                Entities = "entities",
+                Language = "Español",
+                IsTranslated = true,
+                KeyWords = "clave",
+                Sentiment = 4
+
             }
         };
 
@@ -47,29 +38,29 @@ public class ProductData : IProductData
         return random.Next(100, 1000);
     }
 
-    public Task<Product> AddProduct(Product product)
+    public Task<Phrase> AddPhrase(Phrase phrase)
     {
-        product.Id = GetRandomInt();
-        products.Add(product);
-        return Task.FromResult(product);
+        phrase.Id = GetRandomInt();
+        phrases.Add(phrase);
+        return Task.FromResult(phrase);
     }
 
-    public Task<Product> UpdateProduct(Product product)
+    public Task<Phrase> UpdatePhrase(Phrase phrase)
     {
-        var index = products.FindIndex(p => p.Id == product.Id);
-        products[index] = product;
-        return Task.FromResult(product);
+        var index = phrases.FindIndex(p => p.Id == phrase.Id);
+        phrases[index] = phrase;
+        return Task.FromResult(phrase);
     }
 
-    public Task<bool> DeleteProduct(int id)
+    public Task<bool> DeletePhrase(int id)
     {
-        var index = products.FindIndex(p => p.Id == id);
-        products.RemoveAt(index);
+        var index = phrases.FindIndex(p => p.Id == id);
+        phrases.RemoveAt(index);
         return Task.FromResult(true);
     }
 
-    public Task<IEnumerable<Product>> GetProducts()
+    public Task<IEnumerable<Phrase>> GetPhrases()
     {
-        return Task.FromResult(products.AsEnumerable());
+        return Task.FromResult(phrases.AsEnumerable());
     }
 }

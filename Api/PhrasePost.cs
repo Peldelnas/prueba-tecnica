@@ -59,6 +59,18 @@ public class PhrasesPost
             {
                 phrase.Entities += $"Palabra: {entity.Text},\r\nCategoría: {entity.Category},\r\nSub-Categoría: {entity.SubCategory}\r\n";
             }
+
+            var responseKey = client.ExtractKeyPhrases(phrase.Text,lan);
+            foreach(var key in responseKey.Value)
+            {
+                phrase.KeyWords += key+ ", ";
+            }
+            phrase.KeyWords = phrase.KeyWords.Trim().Substring(0,phrase.KeyWords.Length - 2);
+
+
+
+
+
             System.Threading.Thread.Sleep(1000);
             
         }

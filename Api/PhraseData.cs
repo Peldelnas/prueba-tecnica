@@ -17,19 +17,7 @@ public interface IPhraseData
 public class PhraseData : IPhraseData
 {
     private readonly List<Phrase> phrases = new List<Phrase>
-        {
-            new Phrase
-            {
-                Id = 10,
-                Text = "Esto es una prueba",
-                Classification= "classif",
-                Entities = "entities",
-                Language = "Español",
-                TextTranslated = "",
-                KeyWords = "clave",
-                Sentiment = 4
-
-            }
+        {            
         };
 
     private int GetRandomInt()

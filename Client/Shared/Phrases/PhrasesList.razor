@@ -18,12 +18,8 @@ else if (Phrases != null && Phrases.Count() > 0)
                         <ButtonFooter Class="delete-item"
                                       IconClasses="fas fa-trash"
                                       OnClick="@(async _ => await DeletePhrase.InvokeAsync(phrase))"
-                                      Label="Delete" />
-
-                        <ButtonFooter Class="edit-item"
-                                      IconClasses="fas fa-edit"
-                                      OnClick="@(async _ => await SelectPhrase.InvokeAsync(phrase))"
-                                      Label="Edit" />
+                                      Label="Eliminar" />
+                        
 
                     </footer>
 
